@@ -1,0 +1,48 @@
+# skills
+
+Agent skills I actually use. Each skill is a folder with a `SKILL.md` that
+teaches Claude (or any agent that reads skills) how to do one thing well —
+loaded on demand, so it costs nothing until it's relevant.
+
+## The skills
+
+| Skill | What it does |
+|---|---|
+| [`deslop`](deslop/SKILL.md) | De-slop a diff before review — strip AI-authored tells (narration comments, hand-rolled stdlib, dead helpers), audit what's actually necessary, and verify every claim against the real diff. Run it before opening a PR. |
+| [`swiftui`](swiftui/SKILL.md) | The SwiftUI mental model (identity, lifetime, dependencies), performance rules for views/List/Table, and the iOS 26 / macOS Tahoe Liquid Glass APIs — distilled from three WWDC sessions. |
+
+## Install
+
+**Claude Code** — copy a skill into your personal skills directory:
+
+```bash
+git clone https://github.com/31Carlton7/skills.git
+cp -r skills/deslop ~/.claude/skills/deslop
+cp -r skills/swiftui ~/.claude/skills/swiftui
+```
+
+Claude picks them up automatically and invokes them when the task matches the
+skill's description. You can also trigger one explicitly: `/deslop`.
+
+For a single project instead of globally, copy into `.claude/skills/` at the
+repo root.
+
+**Other agents** — anything that supports the [Agent Skills](https://agentskills.io)
+format (a folder + `SKILL.md` with name/description frontmatter) can use these
+as-is.
+
+## Why these exist
+
+- **deslop** — reviewers who spot one AI tell stop reading your code and start
+  hunting for more. Slop is a trust problem, not a style problem. This skill
+  makes the model interrogate its own diff: every comment, every hand-rolled
+  helper, every "for later" export has to justify itself or get deleted.
+- **swiftui** — most SwiftUI bugs (state loss, broken animations, slow lists)
+  are identity bugs, and most agents write SwiftUI without a mental model of
+  identity at all. This gives the model the same foundation Apple's engineers
+  teach, plus the new Liquid Glass design APIs that are past most models'
+  training data.
+
+## License
+
+[MIT](LICENSE)
