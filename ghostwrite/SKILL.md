@@ -1,16 +1,17 @@
 ---
 name: ghostwrite
-description: Author code that reads as if the repo owner wrote it — plain techniques over clever ones, domain-real and unambiguous names, instructions followed literally, and no AI attribution anywhere in the repo (no Co-Authored-By Claude, no "Generated with" trailers, no AI mentions in commits, PR bodies, or comments). Use whenever writing or modifying code, writing a commit message, or opening a PR.
+description: Author code that reads as if the repo owner wrote it — plain techniques over clever ones, domain-real and unambiguous names, instructions followed literally, pre-existing code left alone unless removal was asked for, and no AI attribution anywhere in the repo (no Co-Authored-By Claude, no "Generated with" trailers, no AI mentions in commits, PR bodies, or comments). Use whenever writing or modifying code, writing a commit message, or opening a PR.
 ---
 
 # Ghostwrite: code that carries no fingerprints but yours
 
 [`deslop`](../deslop/SKILL.md) cleans a diff after the fact. This skill governs
-the diff while it is being written, so there is less to clean. Three things
+the diff while it is being written, so there is less to clean. Four things
 give generated code away — clever technique nobody asked for, placeholder
-names, and instructions half-followed — and one thing gives away the author
-outright: attribution left in the git history. Handle all four at authoring
-time. Run `deslop` as the final pass regardless.
+names, instructions half-followed, and lines deleted that nobody asked you to
+touch — and one thing gives away the author outright: attribution left in the
+git history. Handle all five at authoring time. Run `deslop` as the final
+pass regardless.
 
 ## Rule 0 — the repo has one author, and it is not Claude
 
@@ -71,7 +72,59 @@ sentences, then implement it as specified anyway unless it is unsafe or
 destructive. Silently substituting a different design is the failure mode; a
 stated disagreement is not.
 
-## Rule 2 — pick the boring technique
+## Rule 2 — do not delete code you did not write
+
+Default: everything that was in the repo before you started stays in the repo.
+You are adding to someone's codebase, not curating it. A diff that removes
+lines nobody asked you to remove is the fastest way to lose the reviewer's
+trust, and the removal is often the part they cannot verify.
+
+Do not, as a side effect of the task:
+
+- Delete functions, exports, types, or files that look unused — "no callers in
+  the files I read" is not the same as "no callers"
+- Strip commented-out blocks, `TODO`/`FIXME`/`XXX` notes, or disabled tests.
+  Someone left those deliberately: a rollback path, a reference implementation,
+  a note to themselves. They are load-bearing until their owner says otherwise
+- Remove imports, config keys, feature flags, or dependencies that seem stale
+- Rename existing variables to satisfy Rule 4, or reformat lines the change
+  does not touch — a diff whose deletions are mostly cosmetic buries the
+  actual change
+
+Removal is licensed by exactly three things:
+
+1. The request says to remove it
+2. A comment in the code authorizes it and the stated condition has been met
+   (`remove once the v1 endpoint is retired` — and it is retired). A bare
+   `deprecated` with no condition does not qualify
+3. The code you were asked to write cannot coexist with it — you were told to
+   replace an implementation, or the old path would now run twice. Then delete
+   it fully; leaving both the old and new version side by side is its own tell
+
+In case 3, say what you removed and why in one sentence when you report, and
+keep it out of the commit body if the repo's history doesn't discuss that kind
+of detail.
+
+`deslop` Pass 3 says dead code goes — that applies to code *this diff added*,
+helpers you created that never found a consumer. It never licenses deleting
+code that predates your change.
+
+Moving code is not rewriting it: preserve it byte for byte so `git diff -M`
+reads it as a move, and do the move in its own commit if anything else is
+changing in the same files.
+
+Audit before finishing — every removed line should trace back to one of the
+three licenses above:
+
+```sh
+git diff -U0 | grep '^-' | grep -v '^---'
+```
+
+If a line on that list has no reason, restore it. And if you spot pre-existing
+code that is genuinely dead, broken, or dangerous, name it in one sentence and
+let the owner decide — do not fix it uninvited.
+
+## Rule 3 — pick the boring technique
 
 Target: a competent engineer reads the diff top to bottom at review speed and
 never has to stop and decode anything. Cleverness costs them time and buys
@@ -110,7 +163,7 @@ lines — a file of one-call wrappers is its own tell.
 Handle the errors you can actually act on. A blanket catch that logs and
 continues hides bugs and reads as defensive padding.
 
-## Rule 3 — name things like someone fluent in the domain
+## Rule 4 — name things like someone fluent in the domain
 
 **Realistic.** Names come from the problem's own vocabulary, the way the person
 who owns this code talks about it: `invoiceTotal`, `retryAfter`, `staleTokens`,
@@ -145,7 +198,7 @@ short names for short lives, full names for module-level things.
 One concept gets one name across the whole diff. If it is `deadline` in the
 handler, it is not `expiryTime` in the test.
 
-## Rule 4 — comments, briefly
+## Rule 5 — comments, briefly
 
 Full treatment is `deslop` Pass 1. The rule while authoring: **a comment states
 a constraint the code cannot show.** Wire-format quirks, why the obvious
@@ -154,7 +207,7 @@ narration, restating the signature, defending the change to a reviewer — is no
 written in the first place. Reasons the change is correct belong in the PR body,
 not the source.
 
-## Rule 5 — match the neighborhood
+## Rule 6 — match the neighborhood
 
 Before writing in an unfamiliar file, read two or three files next to it. Adopt
 their import order, error style, logging, test harness, and file layout. Code
@@ -163,12 +216,13 @@ that is correct but ignores house style still reads as imported from elsewhere.
 ## Before saying it's done
 
 1. Walk the constraint ledger against the actual diff, line by line
-2. `git diff` and read every added comment against Rule 4
-3. Scan every name added for Rule 3's delete-on-sight and version-suffix lists
-4. Run the repo's own formatter, linter, and the tests the diff touches — the
+2. `git diff` and read every added comment against Rule 5
+3. Scan every name added for Rule 4's delete-on-sight and version-suffix lists
+4. Run the deletion audit from Rule 2 — justify every `-` line or restore it
+5. Run the repo's own formatter, linter, and the tests the diff touches — the
    pinned versions from the manifest, not whatever is global
-5. Run the attribution greps from Rule 0
-6. Run `deslop` on the finished diff
+6. Run the attribution greps from Rule 0
+7. Run `deslop` on the finished diff
 
 Then report what actually happened. If tests fail, show the output. If part of
 the scope is unfinished or untested, say which part and why. A confident "done"

@@ -11,7 +11,7 @@ loaded on demand, so it costs nothing until it's relevant.
 | [`deslop`](deslop/SKILL.md) | De-slop a diff before review — strip AI-authored tells (narration comments, hand-rolled stdlib, dead helpers), audit what's actually necessary, and verify every claim against the real diff. Run it before opening a PR. |
 | [`swiftui`](swiftui/SKILL.md) | The SwiftUI mental model (identity, lifetime, dependencies), performance rules for views/List/Table, and the iOS 26 / macOS Tahoe Liquid Glass APIs — distilled from three WWDC sessions. |
 | [`app-growth`](app-growth/SKILL.md) | The consumer-app playbook — idea selection, the gotcha moment, onboarding psychology, paywall testing, influencer/UGC distribution, and paid ads — distilled from two operators' 0-to-$10K+ playbooks. |
-| [`ghostwrite`](ghostwrite/SKILL.md) | Authoring-time standards so a diff reads as yours before it ever needs cleaning — boring techniques over clever ones, domain-real and unambiguous names, instructions followed literally, and zero AI attribution in the git history. |
+| [`ghostwrite`](ghostwrite/SKILL.md) | Authoring-time standards so a diff reads as yours before it ever needs cleaning — boring techniques over clever ones, domain-real and unambiguous names, instructions followed literally, pre-existing code left alone, and zero AI attribution in the git history. |
 
 ## Install
 
