@@ -12,6 +12,7 @@ loaded on demand, so it costs nothing until it's relevant.
 | [`swiftui`](swiftui/SKILL.md) | The SwiftUI mental model (identity, lifetime, dependencies), performance rules for views/List/Table, and the iOS 26 / macOS Tahoe Liquid Glass APIs — distilled from three WWDC sessions. |
 | [`app-growth`](app-growth/SKILL.md) | The consumer-app playbook — idea selection, the gotcha moment, onboarding psychology, paywall testing, influencer/UGC distribution, and paid ads — distilled from two operators' 0-to-$10K+ playbooks. |
 | [`ghostwrite`](ghostwrite/SKILL.md) | Authoring-time standards so a diff reads as yours before it ever needs cleaning — boring techniques over clever ones, domain-real and unambiguous names, instructions followed literally, pre-existing code left alone, and zero AI attribution in the git history. |
+| [`ship-feature`](ship-feature/SKILL.md) | The loop for turning a feature request into a merged PR — research the ask (including any screenshot or screen recording) before building, slice it into one PR per shippable change, prove it by driving the real app and re-reading the frames you captured, then stack and land it. |
 
 ## Install
 
@@ -22,6 +23,7 @@ git clone https://github.com/31Carlton7/skills.git
 cp -r skills/deslop ~/.claude/skills/deslop
 cp -r skills/swiftui ~/.claude/skills/swiftui
 cp -r skills/ghostwrite ~/.claude/skills/ghostwrite
+cp -r skills/ship-feature ~/.claude/skills/ship-feature
 ```
 
 Claude picks them up automatically and invokes them when the task matches the
@@ -49,6 +51,13 @@ as-is.
   the code is being written. It also holds the line on attribution: no
   `Co-Authored-By: Claude`, no "Generated with" footer, nothing in the history that
   says the repo had a second author.
+
+- **ship-feature** — a feature request is under-specified on purpose, and the
+  usual failure is fast code against a wrong reading, followed by "should be
+  working now". This skill front-loads the research (including treating a
+  screenshot or a clip as the spec it actually is) and back-loads the evidence:
+  run the real build, capture it, and re-read the capture before claiming
+  anything. One PR per shippable change, stacked when they depend on each other.
 
 ## License
 
