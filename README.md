@@ -13,6 +13,7 @@ loaded on demand, so it costs nothing until it's relevant.
 | [`app-growth`](app-growth/SKILL.md) | The consumer-app playbook — idea selection, the gotcha moment, onboarding psychology, paywall testing, influencer/UGC distribution, and paid ads — distilled from two operators' 0-to-$10K+ playbooks. |
 | [`ghostwrite`](ghostwrite/SKILL.md) | Authoring-time standards so a diff reads as yours before it ever needs cleaning — boring techniques over clever ones, domain-real and unambiguous names, instructions followed literally, pre-existing code left alone, and zero AI attribution in the git history. |
 | [`ship-feature`](ship-feature/SKILL.md) | The loop for turning a feature request into a merged PR — research the ask (including any screenshot or screen recording) before building, slice it into one PR per shippable change, prove it by driving the real app and re-reading the frames you captured, then stack and land it. |
+| [`app-review`](app-review/SKILL.md) | A pre-submission audit that plays App Store / Google Play reviewer before the real one does — ~155 checks across guidelines, privacy manifests, Data safety, billing, and field-tested rejection patterns, looped until the verdict is GREENLIT. |
 
 ## Install
 
@@ -24,6 +25,7 @@ cp -r skills/deslop ~/.claude/skills/deslop
 cp -r skills/swiftui ~/.claude/skills/swiftui
 cp -r skills/ghostwrite ~/.claude/skills/ghostwrite
 cp -r skills/ship-feature ~/.claude/skills/ship-feature
+cp -r skills/app-review ~/.claude/skills/app-review
 ```
 
 Claude picks them up automatically and invokes them when the task matches the
@@ -58,6 +60,11 @@ as-is.
   screenshot or a clip as the spec it actually is) and back-loads the evidence:
   run the real build, capture it, and re-read the capture before claiming
   anything. One PR per shippable change, stacked when they depend on each other.
+- **app-review** — most rejections are objective and preventable: a vague
+  purpose string, a missing restore-purchases button, a demo account that
+  doesn't log in. This runs every check a reviewer and their scanners would,
+  cites the guideline for each finding, and says plainly which lanes are still
+  subjective so "GREENLIT" never gets read as a guarantee.
 
 ## License
 
