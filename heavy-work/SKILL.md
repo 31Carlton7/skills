@@ -32,9 +32,10 @@ Then decide:
 
 | What you see | What to do |
 |---|---|
-| Pressure normal, load under the core count | Go. Half the cores is plenty of test workers. |
-| Pressure warn, or swapping out steadily | Run only the tests that cover your change, with at most 2 workers. |
-| Pressure critical, or load over 1.5× the cores | Do not start. Finish or stop your own idle work, then look again. |
+| Pressure normal | Go. Half the cores is plenty of test workers. |
+| Pressure warn, or swapping out steadily | Run only the tests that cover your change, with at most 2 workers (1 on a machine with fewer than 8 cores). |
+| Pressure critical | Do not start a build, a full suite or a simulator. Finish or stop what is running, then look again. |
+| Load over 1.5× the cores | The CPUs are oversubscribed: wait for running work to finish, or use fewer workers. |
 | A full suite or build is already running | Do not start another. Run targeted tests, or wait for it. |
 
 macOS can report "normal" while it pages out to a swap file that only grows. Swap
@@ -74,8 +75,10 @@ swapped where `ps` cannot see it.
   `adb -s <serial> emu kill`.
 - Never shut down a device you did not boot. A simulator that was already running is
   somebody's Xcode session.
-- In Realm, a simulator Realm booted is shut down on its own after half an hour with
-  nothing using it — which is a backstop, not a reason to leave one running.
+- In Realm, a simulator Realm booted is shut down on its own once nothing has used it
+  for its idle window: 30 minutes by default, 10 while memory is short and 5 when it is
+  critical — and at once from Settings ▸ RAM's button, for one nobody has touched in
+  the last few minutes. That is a backstop, not a reason to leave one running.
 
 ## Rule 3 — servers, watchers and background commands
 
@@ -85,8 +88,11 @@ swapped where `ps` cannot see it.
   `lsof -nP -iTCP:<port> -sTCP:LISTEN -t | xargs kill`.
 - Prefer a one-shot build or a single request over a long-running process.
 - A command you background keeps your own agent process alive too. In Realm, an idle
-  engine is stopped to free its memory — but never while it holds a backgrounded
-  command, so a forgotten dev server pins the whole engine in memory with it.
+  engine is stopped to free its memory. It spares a Claude engine whose Bash tool is
+  still running a command it backgrounded, or that set a loop or a cron — but it
+  cannot see every engine's background work, so a server you started in the
+  background may be stopped with your engine, or may pin it in memory. Stop what you
+  start rather than relying on either.
 
 ## Rule 4 — clean up what you leave behind
 
