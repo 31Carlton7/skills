@@ -14,6 +14,7 @@ loaded on demand, so it costs nothing until it's relevant.
 | [`ghostwrite`](ghostwrite/SKILL.md) | Authoring-time standards so a diff reads as yours before it ever needs cleaning — boring techniques over clever ones, domain-real and unambiguous names, instructions followed literally, pre-existing code left alone, and zero AI attribution in the git history. |
 | [`ship-feature`](ship-feature/SKILL.md) | The loop for turning a feature request into a merged PR — research the ask (including any screenshot or screen recording) before building, slice it into one PR per shippable change, prove it by driving the real app and re-reading the frames you captured, then stack and land it. |
 | [`app-review`](app-review/SKILL.md) | A pre-submission audit that plays App Store / Google Play reviewer before the real one does — ~155 checks across guidelines, privacy manifests, Data safety, billing, and field-tested rejection patterns, looped until the verdict is GREENLIT. |
+| [`heavy-work`](heavy-work/SKILL.md) | Builds, test suites, simulators and dev servers on a machine other agents share — check memory pressure first, cap test workers when it is short, never two full suites at once, and shut down or stop everything you started. |
 
 ## Install
 
@@ -26,6 +27,7 @@ cp -r skills/swiftui ~/.claude/skills/swiftui
 cp -r skills/ghostwrite ~/.claude/skills/ghostwrite
 cp -r skills/ship-feature ~/.claude/skills/ship-feature
 cp -r skills/app-review ~/.claude/skills/app-review
+cp -r skills/heavy-work ~/.claude/skills/heavy-work
 ```
 
 Claude picks them up automatically and invokes them when the task matches the
@@ -65,6 +67,11 @@ as-is.
   doesn't log in. This runs every check a reviewer and their scanners would,
   cites the guideline for each finding, and says plainly which lanes are still
   subjective so "GREENLIT" never gets read as a guarantee.
+- **heavy-work** — every agent on a shared Mac assumes the machine is its own.
+  Four of them starting full test suites at once took the load average into the
+  hundreds and 20 GB into swap, and every suite ran slower than it would have
+  alone. This makes the model look before it lifts, size the work to what is left,
+  and leave nothing running behind it.
 
 ## License
 
