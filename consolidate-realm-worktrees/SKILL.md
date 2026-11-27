@@ -57,7 +57,7 @@ For each dirty worktree:
 2. Stop every duplicate primary-checkout dev supervisor and wait for its process tree to exit.
 3. In the clean primary checkout, run `git merge --ff-only <aggregate>`. Refuse a non-fast-forward update and investigate instead of rewriting `main`.
 4. Run `pnpm install --frozen-lockfile` when the lockfile or workspace packages changed.
-5. Start exactly one persistent `pnpm dev` process from the primary checkout.
+5. Start exactly one persistent `pnpm dev` process from the primary checkout, as `env -u REALM_AGENT_SHELL pnpm dev`. Realm sets `REALM_AGENT_SHELL=1` in its agents' shells, and an Electron app started with it opens hidden windows and a scratch userData folder. The restarted app is the owner's own, so it must start without it.
 6. Verify the renderer URL appears, Electron starts, the server watcher is active, and only one primary dev supervisor remains.
 7. Report the final `main` commit, branches covered, validation counts, any isolated/reduced-concurrency retry, retained artifacts, and app health.
 
