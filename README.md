@@ -15,6 +15,7 @@ loaded on demand, so it costs nothing until it's relevant.
 | [`ship-feature`](ship-feature/SKILL.md) | The loop for turning a feature request into a merged PR — research the ask (including any screenshot or screen recording) before building, slice it into one PR per shippable change, prove it by driving the real app and re-reading the frames you captured, then stack and land it. |
 | [`app-review`](app-review/SKILL.md) | A pre-submission audit that plays App Store / Google Play reviewer before the real one does — ~155 checks across guidelines, privacy manifests, Data safety, billing, and field-tested rejection patterns, looped until the verdict is GREENLIT. |
 | [`heavy-work`](heavy-work/SKILL.md) | Builds, test suites, simulators and dev servers on a machine other agents share — check memory pressure first, cap test workers when it is short, never two full suites at once, and shut down or stop everything you started. |
+| [`consolidate-realm-worktrees`](consolidate-realm-worktrees/SKILL.md) | Bring every local Realm worktree's committed and uncommitted work into one validated history, fast-forward `main`, and restart the primary checkout's `pnpm dev` as one clean instance. |
 
 ## Install
 
@@ -28,6 +29,7 @@ cp -r skills/ghostwrite ~/.claude/skills/ghostwrite
 cp -r skills/ship-feature ~/.claude/skills/ship-feature
 cp -r skills/app-review ~/.claude/skills/app-review
 cp -r skills/heavy-work ~/.claude/skills/heavy-work
+cp -r skills/consolidate-realm-worktrees ~/.claude/skills/consolidate-realm-worktrees
 ```
 
 Claude picks them up automatically and invokes them when the task matches the

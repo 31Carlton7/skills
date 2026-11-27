@@ -1,0 +1,4 @@
+interface:
+  display_name: "Consolidate Realm Worktrees"
+  short_description: "Merge local Realm work and restart safely"
+  default_prompt: "Use $consolidate-realm-worktrees to consolidate every local Realm worktree into main and restart the app."
